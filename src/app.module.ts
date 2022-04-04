@@ -9,7 +9,7 @@ import { ChartsModule } from './modules/charts/charts.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://Rostyslav:renaultkangoo1406@cluster0.tibi7.mongodb.net/test'),
+    MongooseModule.forRoot(process.env.DB_CONNECT_URI || 'mongodb+srv://Rostyslav:renaultkangoo1406@cluster0.tibi7.mongodb.net/test'),
     UserModule,
     AuthModule,
     ChartsModule,
