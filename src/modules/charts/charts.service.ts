@@ -1,0 +1,31 @@
+import { Injectable } from '@nestjs/common';
+import {Charts, ChartsDocument} from "./entity/charts.entity";
+import { Model } from 'mongoose';
+import {InjectModel} from "@nestjs/mongoose";
+import { DB_MODELS } from "../../common/enums/model";
+
+@Injectable()
+export class ChartsService {
+    constructor(@InjectModel(DB_MODELS.charts) private readonly model: Model<ChartsDocument>) {}
+
+    async create(charts: Charts): Promise<Charts> {
+        const newChar = new this.model(charts);
+        return newChar.save();
+    }
+    async readAll(): Promise<Charts[]> {
+        return await this.model.find().exec();
+    }
+
+    async readById(id): Promise<Charts> {
+        return await this.model.findById(id).exec();
+    }
+
+    async update(id, chart: Charts): Promise<Charts> {
+        return await this.model.findByIdAndUpdate(id, chart, {new: true})
+    }
+
+    async delete(id): Promise<any> {
+        return await this.model.findByIdAndRemove(id);
+    }
+
+}
