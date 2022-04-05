@@ -16,8 +16,8 @@ export class ChartsService {
         return await this.model.find().exec();
     }
 
-    async readById(id): Promise<Charts> {
-        return await this.model.findById(id).exec();
+    async readById(id): Promise<any> {
+        return await this.model.find({ id }).exec();
     }
 
     async update(id, chart: Charts): Promise<Charts> {

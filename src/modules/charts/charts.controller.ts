@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ChartsService } from './charts.service';
 import {Charts} from "./entity/charts.entity";
+import { errorFactory } from "../../common/utils/error.factory";
 
 @Controller('charts')
 export class ChartsController {
