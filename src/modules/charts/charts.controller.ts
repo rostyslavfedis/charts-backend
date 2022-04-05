@@ -32,6 +32,7 @@ export class ChartsController {
     @Get('/:id')
     async findById(@Res() response, @Param('id') id) {
         const charts = await this.service.readById(id);
+        console.log(charts);
         return response.status(HttpStatus.OK).json({
             charts
         })
