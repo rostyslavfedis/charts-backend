@@ -17,16 +17,17 @@ export class ChartsService {
     }
 
     async readById(id): Promise<any> {
-      const chart =  await this.model.find({ id }).exec();
-      return chart[0]
+      const charts =  await this.model.find({ id }).exec();
+      return charts[0]
     }
 
     async update(id, chart: Charts): Promise<Charts> {
-        return await this.model.findByIdAndUpdate(id, chart, {new: true})
+        return await this.model.findOneAndReplace({ id }, chart, { new: true })
+
     }
 
     async delete(id): Promise<any> {
-        return await this.model.findByIdAndRemove(id);
+        return await this.model.findOneAndRemove({ id });
     }
 
 }

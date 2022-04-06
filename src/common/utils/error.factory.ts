@@ -7,8 +7,8 @@ export enum EXCEPTION_TYPE {
 export interface IErrorMeta {
     message: string,
     status?: any,
-    type?: EXCEPTION_TYPE
-
+    type?: EXCEPTION_TYPE,
+    success?: boolean
 }
 
 export const errorFactory = (args: IErrorMeta) => {
@@ -18,7 +18,8 @@ export const errorFactory = (args: IErrorMeta) => {
             throw new HttpException(
                 {
                     message: args.message,
-                    status: args.status ? args.status : 500
+                    status: args.status ? args.status : 500,
+                    success: args.success
                 },
                 args.status ? args.status : 500
             );
@@ -26,7 +27,8 @@ export const errorFactory = (args: IErrorMeta) => {
             throw new HttpException(
                 {
                     message: args.message,
-                    status: args.status ? args.status : 500
+                    status: args.status ? args.status : 500,
+                    success: args.success
                 },
                 args.status ? args.status : 500
             );

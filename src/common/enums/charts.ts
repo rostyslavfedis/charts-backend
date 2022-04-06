@@ -1,0 +1,1 @@
+export const CHARTS_TYPE = ['bar','doughnut','pie','line']
