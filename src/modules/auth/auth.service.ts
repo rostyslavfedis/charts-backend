@@ -28,17 +28,11 @@ export class AuthService {
       encryptedPassword,
     );
 
-    if (!user){
-        return {
-          message: "User doesn't exist or password is invalid",
-          success:false
-      }
-    }else{
       const token = this.tokenService.createAuthToken({
         id: user.id,
       });
       return new SingInResponseDTO(user, token);
-    }
+
   }
 
   public async signUp(body:SignUpDTO): Promise<User> {

@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { AuthGuard } from "@nestjs/passport";
-import {SignUpDTO} from "./dto/auth.dto";
+import { SignUpDTO, SingInResponseDTO } from "./dto/auth.dto";
 
 
 @Controller('auth')
@@ -30,10 +30,18 @@ export class AuthController {
   async signIn(@Body() body): Promise<any> {
     const user =  await this.authService.signIn(body);
 
-    return {
-      data:user,
-      success:true
+    if (!user){
+      return {
+        message: "User doesn't exist or password is invalid",
+        success:false
+      }
+    }else{
+      return {
+        data:user,
+        success:true
+      }
     }
+
   }
 
   @Post('signup')
