@@ -28,10 +28,14 @@ export class AuthService {
       encryptedPassword,
     );
 
+    if(user){
       const token = this.tokenService.createAuthToken({
-        id: user.id,
+        id: user.id
       });
       return new SingInResponseDTO(user, token);
+    }else{
+      return user;
+    }
 
   }
 
