@@ -4,8 +4,8 @@ import {
   Post,
   Get,
   UseGuards,
-  Req,
-} from '@nestjs/common';
+  Req, HttpStatus
+} from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { AuthGuard } from "@nestjs/passport";
 import {SignUpDTO} from "./dto/auth.dto";
@@ -18,16 +18,31 @@ export class AuthController {
   @Get()
   @UseGuards(AuthGuard())
   public async authentication(@Req() req): Promise<any> {
-    return await this.authService.authentication(req.user);
+    const user =  await this.authService.authentication(req.user);
+
+    return {
+      data:user,
+      success:true
+    }
   }
 
   @Post('signin')
   async signIn(@Body() body): Promise<any> {
-    return await this.authService.signIn(body);
+    const user =  await this.authService.signIn(body);
+
+    return {
+      data:user,
+      success:true
+    }
   }
 
   @Post('signup')
   async signUp(@Body() body:SignUpDTO): Promise<any> {
-    return await this.authService.signUp(body);
+    const user = await this.authService.signUp(body);
+
+    return {
+      data:user,
+      success:true
+    }
   }
 }

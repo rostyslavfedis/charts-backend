@@ -16,7 +16,6 @@ export class AuthService {
   ) {}
 
   public async authentication(user: User): Promise<any> {
-    console.log(user);
     return await this.userService.findOneById(user.id);
   }
 
