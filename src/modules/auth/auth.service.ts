@@ -28,16 +28,17 @@ export class AuthService {
       encryptedPassword,
     );
 
-    if (!user)
-      errorFactory({
-        message: "User doesn't exist or password is invalid",
-        status: HttpStatus.BAD_REQUEST,
+    if (!user){
+        return {
+          message: "User doesn't exist or password is invalid",
+          success:false
+      }
+    }else{
+      const token = this.tokenService.createAuthToken({
+        id: user.id,
       });
-
-    const token = this.tokenService.createAuthToken({
-      id: user.id,
-    });
-    return new SingInResponseDTO(user, token);
+      return new SingInResponseDTO(user, token);
+    }
   }
 
   public async signUp(body:SignUpDTO): Promise<User> {
@@ -49,8 +50,6 @@ export class AuthService {
       .password(hash)
         .username(body.username)
       .build();
-    console.log(user);
     return await this.userService.createUser(user)
-    // return await this.userRepository.create(user);
   }
 }
