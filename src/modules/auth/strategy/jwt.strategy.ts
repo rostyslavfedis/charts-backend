@@ -18,8 +18,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   public async validate(payload: any): Promise<any> {
     const userDTO = await this.userService.findOneByIdOptional(payload.id);
-    console.log('userDTO',userDTO);
-    console.log('payload',payload);
     if (!userDTO)
       errorFactory({
         message: 'Invalid token',

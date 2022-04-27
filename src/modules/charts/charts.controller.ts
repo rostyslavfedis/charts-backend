@@ -66,6 +66,20 @@ export class ChartsController {
             success:true
         })
     }
+    @Get('event/:eventId')
+    async findByEventId(@Res() response, @Param('eventId') eventId) {
+        const data = await this.service.readByEventId(eventId);
+        if (!data)
+            errorFactory({
+                message: "Charts no found by this event id",
+                status: HttpStatus.NOT_FOUND,
+                success:false
+            });
+        return response.status(HttpStatus.OK).json({
+            data,
+            success:true
+        })
+    }
 
     @Put('/:id')
     async update(@Res() response, @Param('id') id, @Body() chart: Charts) {

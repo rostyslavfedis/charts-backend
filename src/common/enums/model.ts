@@ -1,4 +1,5 @@
 export const DB_MODELS = {
   users: 'users',
-  charts: 'charts'
+  charts: 'charts',
+  events: 'events'
 }

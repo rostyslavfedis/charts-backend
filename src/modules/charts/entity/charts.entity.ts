@@ -17,6 +17,10 @@ export class Charts {
     labels: string[]
     @Prop()
     type: string
+    @Prop()
+    eventId: string
+    @Prop()
+    status: string
 }
 
 export const ChartEntity = SchemaFactory.createForClass(Charts);
