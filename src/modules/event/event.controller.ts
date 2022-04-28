@@ -1,18 +1,19 @@
 import {
     Body,
     Controller,
-    Delete,
-    Get, HttpStatus,
+    Delete, forwardRef,
+    Get, HttpStatus, Inject,
     Param,
     Post,
-    Put, Res,
-} from '@nestjs/common';
+    Put, Res
+} from "@nestjs/common";
 import { errorFactory } from "../../common/utils/error.factory";
 import { EventService } from "./event.service";
+import { ChartsService } from "../charts/charts.service";
 
 @Controller('events')
 export class EventController {
-    constructor(private readonly service: EventService) {}
+    constructor(private readonly service: EventService, @Inject(forwardRef(() => ChartsService)) private readonly charts: ChartsService) {}
 
     @Post('create-event')
     async create(@Res() response, @Body() event: any) {
@@ -24,15 +25,23 @@ export class EventController {
         }
     @Get()
     async fetchAll(@Res() response) {
-        const data = await this.service.readAll();
-        if (!data)
+        const events = await this.service.readAll();
+        const newResponse = [];
+
+       for( const event of events){
+           const data = await this.charts.readByEventId(event.id);
+           newResponse.push({ chartLength:data?.length, event })
+       }
+
+        if (!events)
             errorFactory({
                 message: "You don`t have any event",
                 status: HttpStatus.NOT_FOUND,
                 success:false
             });
         return response.status(HttpStatus.OK).json({
-            data,
+            data: newResponse,
+            // length
             success:true
         })
     }
