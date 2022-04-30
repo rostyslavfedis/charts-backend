@@ -5,7 +5,7 @@ import {
     Get, HttpStatus, Inject,
     Param,
     Post,
-    Put, Res
+    Put, Res, UseGuards
 } from "@nestjs/common";
 import { ChartsService } from './charts.service';
 import {Charts} from "./entity/charts.entity";
@@ -14,12 +14,14 @@ import { CHARTS_TYPE } from "../../common/enums/charts";
 import { EventModule } from "../event/event.module";
 import { EventService } from "../event/event.service";
 import { STATUS } from "../../common/enums/event";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('charts')
 export class ChartsController {
     constructor(private readonly service: ChartsService, @Inject(forwardRef(() => EventService)) private readonly event: EventService) {}
 
     @Post('create-chart')
+    @UseGuards(AuthGuard('jwt'))
     async create(@Res() response, @Body() charts: Charts) {
         if (Object.keys(charts).length < 6) {
             errorFactory({
@@ -110,6 +112,7 @@ export class ChartsController {
     }
 
     @Put('/:id')
+    @UseGuards(AuthGuard('jwt'))
     async update(@Res() response, @Param('id') id, @Body() chart: Charts) {
         const data = await this.service.update(id, chart);
         if (!data)
@@ -132,6 +135,7 @@ export class ChartsController {
     }
 
     @Delete('/:id')
+    @UseGuards(AuthGuard('jwt'))
     async delete(@Res() response, @Param('id') id) {
         const data = await this.service.delete(id);
         if (!data)

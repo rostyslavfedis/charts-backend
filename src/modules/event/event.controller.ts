@@ -5,17 +5,19 @@ import {
     Get, HttpStatus, Inject,
     Param,
     Post,
-    Put, Res
+    Put, Res, UseGuards
 } from "@nestjs/common";
 import { errorFactory } from "../../common/utils/error.factory";
 import { EventService } from "./event.service";
 import { ChartsService } from "../charts/charts.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('events')
 export class EventController {
     constructor(private readonly service: EventService, @Inject(forwardRef(() => ChartsService)) private readonly charts: ChartsService) {}
 
     @Post('create-event')
+    @UseGuards(AuthGuard('jwt'))
     async create(@Res() response, @Body() event: any) {
         const data = await this.service.create(event);
             return response.status(HttpStatus.CREATED).json({
@@ -23,6 +25,7 @@ export class EventController {
                 success: true
             })
         }
+
     @Get()
     async fetchAll(@Res() response) {
         const events = await this.service.readAll();
@@ -62,6 +65,7 @@ export class EventController {
     }
 
     @Put('/:id')
+    @UseGuards(AuthGuard('jwt'))
     async update(@Res() response, @Param('id') id, @Body() event: any) {
         const data = await this.service.update(id, event);
         if (!data)
@@ -77,6 +81,7 @@ export class EventController {
     }
 
     @Delete('/:id')
+    @UseGuards(AuthGuard('jwt'))
     async delete(@Res() response, @Param('id') id) {
         const data = await this.service.delete(id);
         if (!data)
