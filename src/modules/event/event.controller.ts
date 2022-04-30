@@ -81,9 +81,15 @@ export class EventController {
     }
 
     @Delete('/:id')
-    @UseGuards(AuthGuard('jwt'))
+    // @UseGuards(AuthGuard('jwt'))
     async delete(@Res() response, @Param('id') id) {
         const data = await this.service.delete(id);
+        const arrayForRemove = await  this.charts.readByEventId(id)
+
+        for(const elem of arrayForRemove){
+            await this.charts.delete(elem?.id)
+        }
+
         if (!data)
             errorFactory({
                 message: "Event can`t be delete",
